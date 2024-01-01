@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, Paper, Scissors Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        #score {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* Přidáno pro podbarvení textu */
+        .win {
+            color: green;
+        }
+
+        .lose {
+            color: red;
+        }
+
+        .tie {
+            color: blue;
+        }
+
+        /* Přidáno pro skrytí otázky na další hru */
+        #play-again {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Rock, Paper, Scissors Game</h1>
+    <button onclick="getChoices('rock')" id="rockBtn">Rock</button>
+    <button onclick="getChoices('paper')" id="paperBtn">Paper</button>
+    <button onclick="getChoices('scissors')" id="scissorsBtn">Scissors</button>
+    <div id="result"></div>
+    <div id="score"></div>
+    <!-- Přidáno pro otázku na další hru -->
+    <div id="play-again">
+        <p>Would you like to play again?</p>
+        <button onclick="resetGame()">Yes</button>
+        <button onclick="closeGame()">No</button>
+    </div>
+
+    <script>
+        var playerScore = 0;
+        var computerScore = 0;
+
+        // Přidáno pro zachycení tlačítek Rock, Paper a Scissors
+        var rockBtn = document.getElementById("rockBtn");
+        var paperBtn = document.getElementById("paperBtn");
+        var scissorsBtn = document.getElementById("scissorsBtn");
+
+        function getChoices(playerChoice) {
+            var options = ["rock", "paper", "scissors"];
+            var computerChoice = options[Math.floor(Math.random() * options.length)];
+            var choices = { player: playerChoice, computer: computerChoice };
+            checkWin(choices.player, choices.computer);
+        }
+
+        function checkWin(player, computer) {
+            var resultDiv = document.getElementById("result");
+            var scoreDiv = document.getElementById("score");
+            var playAgainDiv = document.getElementById("play-again");
+
+            resultDiv.innerHTML = `<p>You chose ${player}, computer chose ${computer}</p>`;
+
+            if (player === computer) {
+                resultDiv.innerHTML += "<p class='tie'>It's a tie!</p>";
+            } else if (player === "rock") {
+                if (computer === "scissors") {
+                    resultDiv.innerHTML += "<p class='win'>Rock smashes scissors! You win!</p>";
+                    playerScore++;
+                } else {
+                    resultDiv.innerHTML += "<p class='lose'>Paper covers rock! You lose.</p>";
+                    computerScore++;
+                }
+            } else if (player === "paper") {
+                if (computer === "rock") {
+                    resultDiv.innerHTML += "<p class='win'>Paper covers rock! You win!</p>";
+                    playerScore++;
+                } else {
+                    resultDiv.innerHTML += "<p class='lose'>Scissors cuts paper! You lose.</p>";
+                    computerScore++;
+                }
+            } else if (player === "scissors") {
+                if (computer === "paper") {
+                    resultDiv.innerHTML += "<p class='win'>Scissors cut paper! You win!</p>";
+                    playerScore++;
+                } else {
+                    resultDiv.innerHTML += "<p class='lose'>Rock smashes scissors! You lose.</p>";
+                    computerScore++;
+                }
+            }
+
+            // Zobraz bodový stav
+            scoreDiv.innerHTML = `<p>Player: ${playerScore} | Computer: ${computerScore}</p>`;
+
+            // Kontrola, zda někdo dosáhl 5 bodů
+            if (playerScore === 5 || computerScore === 5) {
+                if (playerScore === 5) {
+                    resultDiv.innerHTML += `<p class='win'>Game Over! You won!</p>`;
+                } else {
+                    resultDiv.innerHTML += `<p class='lose'>Game Over! Computer won!</p>`;
+                }
+
+                // Zakáže tlačítek Rock, Paper a Scissors
+                rockBtn.disabled = true;
+                paperBtn.disabled = true;
+                scissorsBtn.disabled = true;
+
+                // Zobraz otázku na další hru
+                playAgainDiv.style.display = "block";
+            }
+        }
+
+        function resetGame() {
+            // Resetuj body
+            playerScore = 0;
+            computerScore = 0;
+
+            // Povol tlačítka Rock, Paper a Scissors
+            rockBtn.disabled = false;
+            paperBtn.disabled = false;
+            scissorsBtn.disabled = false;
+
+            // Skryj otázku na další hru
+            document.getElementById("play-again").style.display = "none";
+
+            // Vyčisti výsledky a skóre
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("score").innerHTML = "";
+        }
+
+        function closeGame() {
+            // Zavři hru
+            alert("Thank you for playing!");
+            window.close();
+        }
+    </script>
+</body>
+
+</html>
